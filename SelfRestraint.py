@@ -14,6 +14,7 @@ from PyQt4.QtGui import QPushButton, QDialog, QApplication, QSlider, QLabel, QHB
 QVBoxLayout, QPlainTextEdit, QLCDNumber, QMessageBox
 from threading import Timer
 
+homedir="/home/IT_College/.selfrestraint"
 
 class MainForm(QDialog):
 
@@ -81,6 +82,7 @@ class ListEditor(QDialog):
         self.setWindowTitle("Website Blocklist")
         # Create widgets
         self.tableView = QPlainTextEdit()
+	config_dir="~/"
 
         if not os.path.isfile(os.path.join(config_dir, 'blocklist')):
             self.createBlockFile()
@@ -121,6 +123,7 @@ class Backend():
     """Backend class to deal with parsing the blocked lists
     and appending them to the system hosts file"""
     def __init__(self, parent=None):
+	print(sys.platform)
         if sys.platform.startswith('linux'):
             initHosts()
 
@@ -128,6 +131,9 @@ class Backend():
             self.HostsFile = "/etc/hosts"
 
         elif sys.platform.startswith('win'):
+            self.HostsFile = "C:\Windows\System32\drivers\etc\hosts"
+
+        elif sys.platform.startswith('cygwin'):
             self.HostsFile = "C:\Windows\System32\drivers\etc\hosts"
 
         else:
@@ -230,9 +236,10 @@ class Backend():
 
 class checkDonation():
     def __init__(self, parent=None):
-        if not os.path.isfile(homedir + "donateinfo"):
-            self.createDonateFile()
-        self.loadDonateFile()
+        #if not os.path.isfile(homedir + "donateinfo"):
+        #    self.createDonateFile()
+        #self.loadDonateFile()
+	pass
 
     def loadDonateFile(self):
         """If a site block file exists, load it"""
@@ -337,7 +344,7 @@ if __name__ == '__main__':
 
     updater = checkForUpdates()
     updater.check()
-    donate = checkDonation()
+    #donate = checkDonation()
     form = MainForm()
     form.show()
 
